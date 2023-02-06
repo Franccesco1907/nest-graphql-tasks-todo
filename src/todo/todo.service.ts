@@ -34,14 +34,20 @@ export class TodoService {
     const { id, description, done } = updateTodoInput;
     const todoToUpdate = this.findOne(id);
 
-    if(description) todoToUpdate.description = description;
-    if(done !== undefined) todoToUpdate.done = done;
-    
-    this.todos = this.todos.map( todo => {
+    if (description) todoToUpdate.description = description;
+    if (done !== undefined) todoToUpdate.done = done;
+
+    this.todos = this.todos.map(todo => {
       return (todo.id === id) ? todoToUpdate : todo;
     })
 
     return todoToUpdate;
+  }
+
+  delete(id: number): Boolean {
+    const todo = this.findOne(id);
+    this.todos = this.todos.filter(todo => todo.id !== id);
+    return true;
   }
 
 }
