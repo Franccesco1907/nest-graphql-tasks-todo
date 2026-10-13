@@ -3,10 +3,10 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('GraphQL API (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -15,10 +15,15 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('returns todo counts through GraphQL', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .post('/graphql')
+      .send({ query: '{ totalTodos pendingTodos completedTodos }' })
       .expect(200)
-      .expect('Hello World!');
+      .expect({ data: { totalTodos: 4, pendingTodos: 3, completedTodos: 1 } });
   });
 });

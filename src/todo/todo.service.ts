@@ -41,7 +41,7 @@ export class TodoService {
   create(createTodoInput: CreateTodoInput): Todo {
     const todo = new Todo();
     todo.description = createTodoInput.description;
-    todo.id = Math.max(...this.todos.map(todo => todo.id)) + 1;
+    todo.id = Math.max(0, ...this.todos.map(todo => todo.id)) + 1;
     this.todos.push(todo);
     return todo;
   }
